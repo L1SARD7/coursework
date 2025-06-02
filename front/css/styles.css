@@ -1,100 +1,101 @@
 body {
     margin: 0;
-    background-color: #181a23; /* темний фон */
+    background-color: #181a23;
     font-family: Arial, sans-serif;
-    color: #e0e6f0;
+    color: #f0f0f0;
 }
 
-header {
-    background: #23263a;
+.header {
+    background: #22243a;
     color: #fff;
-    padding: 14px 0;
-    margin-bottom: 25px;
     box-shadow: 0 2px 6px #000a;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
 }
 
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    letter-spacing: 1px;
-    color: #e2b714; /* золото */
+    color: #ffd700;
+    text-decoration: none;
 }
 
-.search-form input[type="text"] {
-    padding: 6px 8px;
-    border: 1px solid #353946;
+.search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search input[type="text"] {
+    padding: 7px 10px;
     border-radius: 4px;
+    border: 1px solid #44495a;
     background: #23263a;
-    color: #e0e6f0;
-    outline: none;
+    color: #fff;
 }
 
-.search-form button {
-    background: #e2b714;
+.btn {
+    background: #ffd700;
     border: none;
     color: #181a23;
     font-weight: bold;
-    padding: 6px 14px;
+    padding: 7px 15px;
     border-radius: 4px;
-    margin-left: 8px;
     cursor: pointer;
+    margin-left: 6px;
+    font-size: 1rem;
     transition: background 0.2s;
 }
 
-.search-form button:hover {
+.btn:hover {
     background: #fffbe8;
 }
 
-.nav-links a {
-    margin-left: 14px;
+.buttons a {
     color: #fff;
     text-decoration: none;
+    margin-left: 10px;
+    padding: 6px 13px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
     font-weight: 500;
-    transition: color 0.2s;
-}
-.nav-links a:hover {
-    color: #e2b714;
 }
 
-main {
-    max-width: 900px;
+.buttons a:hover {
+    background: #2a2e48;
+    color: #ffd700;
+}
+
+.main {
+    max-width: 800px;
     margin: 0 auto;
     padding: 0 10px;
 }
 
 h1 {
     font-size: 2rem;
-    color: #e2b714;
+    color: #ffd700;
     margin-bottom: 20px;
 }
 
 .game-list {
     list-style: none;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 18px;
+    margin: 0;
 }
 
-.game-list li {
-    background: #222533;
-    border: 1px solid #353946;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px #111a;
-    padding: 18px 22px;
-    min-height: 90px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 1.15rem;
-}
-
-@media (max-width: 700px) {
-    .navbar, main {
-        max-width: 97vw;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .search-form { margin: 10px 0; }
-    .nav-links { margin: 10px 0; }
+.game-item {
+    background: #22243a;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    padding: 18px 18px;
+    border: 1px solid #333650;
+    font-size: 1.1rem;
 }

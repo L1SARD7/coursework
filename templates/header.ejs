@@ -1,17 +1,18 @@
-<header>
-        <nav class="navbar">
-            <div class="logo">GameDB</div>
-            <form class="search-form" method="get" action="/search">
-                <input type="text" name="q" placeholder="Пошук гри...">
-                <button type="submit">Знайти</button>
-            </form>
-            <div class="nav-links">
-                <% if (user) { %>
-                    <a href="/profile">Мій кабінет</a>
-                <% } else { %>
-                    <a href="/login">Увійти</a>
-                    <a href="/register">Зареєструватись</a>
-                <% } %>
-            </div>
-        </nav>
-    </header>
+<header class="header">
+    <nav class="header-nav">
+        <a class="logo" href="/">GamePedia</a>
+        <form class="search" method="get" action="/search">
+            <input type="text" name="q" placeholder="Пошук гри...">
+            <button type="submit" class="btn">Знайти</button>
+        </form>
+        <div class="buttons">
+            <% if (user) { %>
+                <a href="/profile">Мій кабінет</a>
+            <% } else { %>
+                <a href="/login">Увійти</a>
+                <a href="/register">Зареєструватись</a>
+            <% } %>
+        </div>
+    </nav>
+</header>
+
