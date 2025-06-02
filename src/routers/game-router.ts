@@ -1,6 +1,5 @@
 import { Router, Response, NextFunction } from "express"
 import { GetGameWithQuerry, RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuerry } from "../models/RequestTypes"
-import { requestsCounts } from "../app"
 import { CreateGameInputModel } from "../models/CreateGameInputModel"
 import { GameViewModel } from "../models/GameViewModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
@@ -8,7 +7,7 @@ import { URIParamsIdGame } from "../models/URIParamsIdGame"
 import { HTTP_CODES } from "../utility"
 import { bodyGenreValidatorMiddleware, bodyTitleValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { validationResult } from "express-validator"
-import { AuthentificateGameAdmin } from "../repositories/authentificator"
+import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
 
 
@@ -16,21 +15,7 @@ import { gamesService } from "../business/games-business-layer"
 
 export const GamesRouter =  Router({})
 
-const BasicAuthentificator = (req: any, res: any, next: NextFunction) => {
-    
-    if (!req.headers.authorization) {
-    res.set('WWW-Authenticate', 'Basic');
-    return res.status(401).send('Unauthorized');
-    } else { 
-        let isAuthenticated = AuthentificateGameAdmin(req.headers.authorization)
-        if (isAuthenticated) {
-        next()} 
-        else {
-            res.set('WWW-Authenticate', 'Basic');
-            return res.status(401).send('Wrong login or password');
-        }      
-    }
-}
+
 
 GamesRouter.get('/', 
     queryTitleValidatorMiddleware,
