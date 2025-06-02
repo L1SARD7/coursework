@@ -28,7 +28,7 @@ GamesRouter.get('/',
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
     let SortedGames = await gamesService.GetGames(req.query.title, req.query.genre)
-    res.send(SortedGames).status(HTTP_CODES.OK_200)
+    res.json(SortedGames).status(HTTP_CODES.OK_200)
 })
 GamesRouter.get('/:id',
     
