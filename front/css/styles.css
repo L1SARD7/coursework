@@ -99,3 +99,36 @@ h1 {
     border: 1px solid #333650;
     font-size: 1.1rem;
 }
+
+.auth-form {
+    background: #23243a;
+    border-radius: 8px;
+    padding: 24px 28px 18px 28px;
+    box-shadow: 0 2px 7px #0004;
+    max-width: 350px;
+    margin: 0 auto 16px auto;
+    border: 1px solid #333650;
+}
+
+.auth-form label {
+    font-weight: 500;
+    color: #e0e6f0;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 96%;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #44495a;
+    background: #23263a;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.auth-form button {
+    width: 100%;
+}
