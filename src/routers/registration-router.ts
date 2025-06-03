@@ -32,7 +32,7 @@ RegistrationRouter.post('/',
         if (!exist) {
             const CreatedUser = await UserService.CreateNewUser(req.body.login, req.body.email, req.body.password)
             if (CreatedUser) {
-                res.status(HTTP_CODES.Created_201).redirect('/')
+                res.status(HTTP_CODES.Created_201).redirect('/profile')
             } 
             else {
                 res.sendStatus(HTTP_CODES.BAD_REQUEST_400)

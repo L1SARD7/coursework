@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>GamePedia</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<%- include('../Templates/header'); -%>
+<main class="main">
+    <h1>Мій кабінет</h1>
+    <div class="profile-card">
+        <div><b>Логін:</b> <%= user.username || user.login %></div>
+        <div><b>Email:</b> <%= user.email || 'не вказано' %></div>
+        <% if (user.isAdmin) { %>
+            <div style="color:#ffd700;"><b>Статус:</b> Адміністратор</div>
+        <% } %>
+    </div>
+    <form action="/logout" method="post" style="margin-top:24px;">
+        <button class="btn" type="submit">Вийти з акаунту</button>
+    </form>
+</main>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

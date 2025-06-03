@@ -132,3 +132,13 @@ h1 {
 .auth-form button {
     width: 100%;
 }
+
+.profile-card {
+    background: #23243a;
+    padding: 22px 26px;
+    border-radius: 8px;
+    margin-bottom: 22px;
+    border: 1px solid #333650;
+    max-width: 340px;
+    box-shadow: 0 2px 7px #0004;
+}
