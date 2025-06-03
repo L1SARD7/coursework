@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { RequestWithBody } from "../models/RequestTypes"
 import { LoginInputModel } from "../models/LoginInputModel"
-import { bodyLoginValidatorMiddleware, bodyPasswordValidatorMiddleware } from "../validator/LoginInputDataValidator"
+import { bodyLoginValidatorMiddleware, bodyPasswordValidatorMiddleware } from "../validator/LoginAndRegInputDataValidator"
 import { validationResult } from "express-validator"
 import { HTTP_CODES } from "../utility"
 import { UserRepository } from "../repositories/user-db-repository"
