@@ -5,12 +5,13 @@ import { GameViewModel } from "../models/GameViewModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
 import { URIParamsId } from "../models/URIParamsId"
 import { HTTP_CODES } from "../utility"
-import { createGameDataInputValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
+import { gameDataInputValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { validationResult } from "express-validator"
 import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
 import { ReviewRouter } from "./review-router"
 import { reviewService } from "../business/review-business-layer"
+import { error } from "console"
 
 
 
@@ -31,12 +32,14 @@ GamesRouter.get('/add',
 )
 
 GamesRouter.post('/add',
-    createGameDataInputValidatorMiddleware,
+    gameDataInputValidatorMiddleware,
     async (req: RequestWithBody<CreateGameInputModel>, res: Response) => {
     const validation = validationResult(req)
-    if (!validation.isEmpty()) {
+    if (!validation.isEmpty() ) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-    } else {
+    }
+    // @ts-ignore
+    if (req.session.user.isAdmin) {
         const CreatedGame = await gamesService.CreateNewGame(req.body.title, 
             req.body.genre,
             req.body.release_year, 
@@ -44,13 +47,15 @@ GamesRouter.post('/add',
             req.body.description, 
             req.body.imageURL, 
             req.body.trailerYoutubeId)
-
+    
         if (CreatedGame) {
             res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
         } else {
             res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
         }
-
+    }
+    else {
+        res.send('Недостатньо прав для добавлення гри.')
     }
 })
 
@@ -86,8 +91,25 @@ GamesRouter.get('/:id',
     }
 })
 
+GamesRouter.get('/:id/edit',
+    paramsIdValidatorMiddleware,
+    async (req: RequestWithParams<URIParamsId>,
+    res: Response) => {
+    const validation = validationResult(req)
+    if (!validation.isEmpty()) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    }
+    const SelectedGame = await gamesService.GetGameByID(+req.params.id)
+    if (SelectedGame) {
+        res.status(HTTP_CODES.OK_200).render('edit-game', { game: SelectedGame, error: null})
+    }
+    else {
+        res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+    }
+})
+
 GamesRouter.delete('/:id',
-    BasicAuthentificator, 
+    //BasicAuthentificator, 
     paramsIdValidatorMiddleware,
     async (req: RequestWithParams<URIParamsId>, res) => {
     const validation = validationResult(req)
@@ -96,26 +118,32 @@ GamesRouter.delete('/:id',
     }
     let isDeleted = await gamesService.DeleteGame(+req.params.id)
     if (isDeleted) {
-        res.sendStatus(HTTP_CODES.Deleted_204)
+        res.status(HTTP_CODES.Deleted_204).redirect('/')
     }
     else {
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
     }
 })
-// GamesRouter.put('/:id',
-//     BasicAuthentificator, 
-//     paramsIdValidatorMiddleware,
-//     bodyTitleValidatorMiddleware,
-//     bodyGenreValidatorMiddleware,
-//     async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
-//     res: Response) => {
-//     const validation = validationResult(req)
-//     if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
-//         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-//     }
-//     let UpdatedGame = await gamesService.UpdateGame(+req.params.id, req.body.title, req.body.genre)
-//     if (UpdatedGame) {
-//         res.send(UpdatedGame).status(HTTP_CODES.OK_200)
-//     } else
-//     res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
-// })
+
+GamesRouter.put('/:id',
+    //BasicAuthentificator, 
+    paramsIdValidatorMiddleware,
+    gameDataInputValidatorMiddleware,
+    async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
+    res: Response) => {
+        const validation = validationResult(req)
+    if (!validation.isEmpty()) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    }
+    const UpdatedGame = await gamesService.UpdateGame(req.params.id, req.body.title, 
+            req.body.genre,
+            req.body.release_year, 
+            req.body.developer, 
+            req.body.description, 
+            req.body.imageURL, 
+            req.body.trailerYoutubeId)
+    if (UpdatedGame) {
+        res.send(UpdatedGame).status(HTTP_CODES.OK_200)
+    } else
+    res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+})

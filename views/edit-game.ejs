@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Редагування <%= game.title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<%- include('../Templates/header'); -%>
+<main class="main">
+    <h1>Редагування гри</h1>
+    <% if (error) { %>
+        <div style="color: #ff4c4c; margin-bottom:10px"><%= error %></div>
+    <% } %>
+    <form action="/games/<%= game.id %>?_method=PUT" method="POST" class="auth-form"">
+        <label>Назва гри:<br>
+            <input type="text" name="title" required value="<%= game.title %>">
+        </label><br>
+        <label>Жанр:<br>
+            <input type="text" name="genre" required value="<%= game.genre %>">
+        </label><br>
+        <label>Рік випуску:<br>
+            <input type="number" name="release_year" value="<%= game.release_year || '' %>">
+        </label><br>
+        <label>Розробник:<br>
+            <input type="text" name="developer" value="<%= game.developer || '' %>">
+        </label><br>
+        <label>Опис:<br>
+            <textarea name="description"><%= game.description || '' %></textarea>
+        </label><br>
+        <label>Зображення (URL):<br>
+            <input type="text" name="imageURL" value="<%= game.imageURL || '' %>">
+        </label><br>
+        <label>Трейлер:<br>
+            <input type="text" name="trailerYoutubeId" value="<%= game.trailerYoutubeId %>">
+        </label><br>
+        <button type="submit" class="btn">Зберегти</button>
+    </form>
+</main>
+
+
+<script src="">
+</script>
+
+</body>
+</html>

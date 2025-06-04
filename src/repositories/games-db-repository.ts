@@ -21,7 +21,7 @@ export const GamesRepository = {
     },
 
     async UpdateGame (id: number, data: any) {
-        let result = await client.db("GamePedia").collection("games").updateOne({id: id}, {$set : data})
+        const result = await client.db("GamePedia").collection("games").updateOne({id: id}, {$set : data})
         return result.modifiedCount === 1
     }
 }

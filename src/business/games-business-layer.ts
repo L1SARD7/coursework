@@ -21,7 +21,7 @@ export const gamesService = {
     },
 
     async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string) : Promise<any> {
-        let newGame = {
+        const newGame = {
             id: +(new Date()),
             title: title,
             genre: genre,
@@ -32,19 +32,21 @@ export const gamesService = {
             trailerYoutubeId: trailerYoutubeId
         }
         await GamesRepository.CreateNewGame(newGame)
-        let CreatedGame = await GamesRepository.GetGameByID(newGame.id)
+        const CreatedGame = await GamesRepository.GetGameByID(newGame.id)
         return CreatedGame
     },
 
-    async UpdateGame (id: number, title: string | null, genre: string | null) {
-        
-        let new_data: any = {}
-        if (title) {
-            new_data.title = title
-        } if (genre) {
-            new_data.genre = genre
+    async UpdateGame (id: number, title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string) {        
+        const newData = {
+            title: title,
+            genre: genre,
+            release_year: release_year,
+            developer: developer,
+            description: description,
+            imageURL: imageURL,
+            trailerYoutubeId: trailerYoutubeId
         }
-        let result = await GamesRepository.UpdateGame(id, new_data)
+        let result = await GamesRepository.UpdateGame(id, newData)
         if (result) {
             return await GamesRepository.GetGameByID(id)
         }

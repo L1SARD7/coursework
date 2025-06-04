@@ -5,7 +5,7 @@ import session from 'express-session';
 import { RegistrationRouter } from './routers/registration-router';
 import { ProfileRouter } from './routers/profile-router';
 import { ReviewRouter } from './routers/review-router';
-
+import methodOverride from 'method-override'
 export const app = express()
 
 let BodyJsonMiddleware = express.json()
@@ -27,6 +27,7 @@ app.use((req, res, next) => {
 });
 app.use(express.urlencoded({ extended: true }));
 
+app.use(methodOverride('_method'))
 
 app.use('/games', GamesRouter)
 
