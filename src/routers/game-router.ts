@@ -135,7 +135,7 @@ GamesRouter.put('/:id',
     if (!validation.isEmpty()) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
-    const UpdatedGame = await gamesService.UpdateGame(req.params.id, req.body.title, 
+    const UpdatedGame = await gamesService.UpdateGame(+req.params.id, req.body.title, 
             req.body.genre,
             req.body.release_year, 
             req.body.developer, 
@@ -143,7 +143,8 @@ GamesRouter.put('/:id',
             req.body.imageURL, 
             req.body.trailerYoutubeId)
     if (UpdatedGame) {
-        res.send(UpdatedGame).status(HTTP_CODES.OK_200)
-    } else
-    res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+        res.status(HTTP_CODES.OK_200).redirect(`/games/${req.params.id}`)
+    } else {
+        res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+    }
 })

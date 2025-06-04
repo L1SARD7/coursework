@@ -49,7 +49,8 @@ export const gamesService = {
         let result = await GamesRepository.UpdateGame(id, newData)
         if (result) {
             return await GamesRepository.GetGameByID(id)
+        } else {
+            return null
         }
-        return null
     }
 }
