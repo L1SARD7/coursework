@@ -2,38 +2,47 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>GamePedia</title>
+    <title><%= game.title %></title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <%- include('../Templates/header'); -%>
 <main class="main">
-    <div class="game-info">
-        <% if (game.imageURL) { %>
-            <img class="game-img" src="<%= game.imageURL %>" alt="<%= game.title %>">
-        <% } %>
+    <div class="game-top-row">
+        <div class="game-cover">
+            <% if (game.imageURL) { %>
+                <img class="game-cover-img" src="<%= game.imageURL %>" alt="<%= game.title %>">
+            <% } else { %>
+                <div class="game-cover-placeholder">[Немає зображення]</div>
+            <% } %>
+        </div>
         <div class="game-meta">
             <h1><%= game.title %></h1>
-            <div><b>Жанр:</b> <%= game.genre %></div>
-            <div><b>Рік:</b> <%= game.release_year %></div>
-            <div><b>Розробник:</b> <%= game.developer %></div>
-            <div><b>Опис:</b> <%= game.description %></div>
-            <% if (game.rating) { %>
-                <div><b>Середня оцінка:</b> <%= game.rating %></div>
-            <% } %>
-            <% if (game.trailerYoutubeId) { %>
-                <h3>Трейлер</h3>
-                <div class="trailer-block">
-                    <iframe width="420" height="236"
-                    src="https://www.youtube.com/embed/<%= game.trailerYoutubeId %>"
-                    allowfullscreen></iframe>
-                </div>
-            <% } %>
-
+            <div class="game-meta-info">
+                <span><b>Жанр:</b> <%= game.genre %></span>
+                <span><b>Рік:</b> <%= game.release_year || "невідомо" %></span>
+                <span><b>Розробник:</b> <%= game.developer || "невідомо" %></span>
+                <% if (game.rating) { %>
+                    <span><b>Середня оцінка:</b> <%= game.rating %></span>
+                <% } %>
+            </div>
+            <div class="game-description">
+                <b>Опис:</b>
+                <p><%= game.description || 'Опису немає.' %></p>
+            </div>
         </div>
     </div>
 
-    <hr style="margin: 24px 0;">
+    <% if (game.trailerYoutubeId) { %>
+        <div class="game-trailer">
+            <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/<%= game.trailerYoutubeId %>"
+                allowfullscreen>
+            </iframe>
+        </div>
+    <% } %>
+
+    <hr style="margin: 28px 0;">
 
     <div class="game-reviews">
         <h2>Відгуки</h2>
@@ -41,7 +50,7 @@
             <ul>
             <% reviews.forEach(function(review) { %>
                 <li style="margin-bottom:18px;">
-                    <b><%= review.authorName %></b> 
+                    <b><%= review.authorName %></b>
                     <span style="color: #ffd700">[<%= review.rating %>★]</span><br>
                     <%= review.text %>
                 </li>
@@ -74,6 +83,5 @@
 </main>
 
 <script src="/js/main.js"></script>
-
 </body>
 </html>
