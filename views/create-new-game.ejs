@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>GamePedia</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<%- include('../Templates/header'); -%>
+<main class="main">
+    <h1>Додати нову гру</h1>
+    <form class="auth-form" action="/games/add" method="post">
+        <label>Назва гри:<br><input type="text" name="title" required></label><br>
+        <label>Жанр:<br><input type="text" name="genre" required></label><br>
+        <label>Рік випуску:<br><input type="number" name="release_year"></label><br>
+        <label>Розробник:<br><input type="text" name="developer"></label><br>
+        <label>Опис:<br><textarea name="description"></textarea></label><br>
+        <label>Зображення (URL):<br><input type="text" name="imageUrl"></label><br>
+        <label>Трейлер:<br><input type="text" name="trailerURL"></label><br>
+
+        <button type="submit" class="btn">Додати</button>
+    </form>
+</main>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

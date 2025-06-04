@@ -5,7 +5,7 @@ import { GameViewModel } from "../models/GameViewModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
 import { URIParamsId } from "../models/URIParamsId"
 import { HTTP_CODES } from "../utility"
-import { bodyGenreValidatorMiddleware, bodyTitleValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
+import { createGameDataInputValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { validationResult } from "express-validator"
 import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
@@ -49,6 +49,40 @@ GamesRouter.get('/:id',
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
     }
 })
+
+GamesRouter.get('/add', 
+    async (req: any, res: any) => {
+        if (!req.session.user || !req.session.user.isAdmin) {
+        return res.status(HTTP_CODES.Unauthorized_401).send("Доступ лише для адміністратора");
+    }
+    res.render('create-new-game');
+    }
+)
+
+GamesRouter.post('/add',
+    createGameDataInputValidatorMiddleware,
+    async (req: RequestWithBody<CreateGameInputModel>, res: Response) => {
+    const validation = validationResult(req)
+    if (!validation.isEmpty()) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    } else {
+        const CreatedGame = await gamesService.CreateNewGame(req.body.title, 
+            req.body.genre,
+            req.body.release_year, 
+            req.body.developer, 
+            req.body.description, 
+            req.body.imageURL, 
+            req.body.trailerURL)
+
+        if (CreatedGame) {
+            res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
+        } else {
+            res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+        }
+
+    }
+})
+
 GamesRouter.delete('/:id',
     BasicAuthentificator, 
     paramsIdValidatorMiddleware,
@@ -65,36 +99,20 @@ GamesRouter.delete('/:id',
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
     }
 })
-GamesRouter.post('/',
-    BasicAuthentificator,
-    bodyTitleValidatorMiddleware,
-    bodyGenreValidatorMiddleware,
-    async (req: RequestWithBody<CreateGameInputModel>, res: Response) => {
-    const validation = validationResult(req)
-    if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
-        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-    }
-        if ((req.body.title) && (req.body.genre)) {
-        let CreatedGame = await gamesService.CreateNewGame(req.body.title, req.body.genre)
-        res.status(HTTP_CODES.Created_201).json(CreatedGame)
-    } else {
-        res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
-    }
-})
-GamesRouter.put('/:id',
-    BasicAuthentificator, 
-    paramsIdValidatorMiddleware,
-    bodyTitleValidatorMiddleware,
-    bodyGenreValidatorMiddleware,
-    async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
-    res: Response) => {
-    const validation = validationResult(req)
-    if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
-        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-    }
-    let UpdatedGame = await gamesService.UpdateGame(+req.params.id, req.body.title, req.body.genre)
-    if (UpdatedGame) {
-        res.send(UpdatedGame).status(HTTP_CODES.OK_200)
-    } else
-    res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
-})
+// GamesRouter.put('/:id',
+//     BasicAuthentificator, 
+//     paramsIdValidatorMiddleware,
+//     bodyTitleValidatorMiddleware,
+//     bodyGenreValidatorMiddleware,
+//     async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
+//     res: Response) => {
+//     const validation = validationResult(req)
+//     if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
+//         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+//     }
+//     let UpdatedGame = await gamesService.UpdateGame(+req.params.id, req.body.title, req.body.genre)
+//     if (UpdatedGame) {
+//         res.send(UpdatedGame).status(HTTP_CODES.OK_200)
+//     } else
+//     res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
+// })

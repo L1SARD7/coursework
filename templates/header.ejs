@@ -7,6 +7,9 @@
         </form>
         <div class="buttons">
             <% if (user) { %>
+                <% if (user.isAdmin) { %>
+                <a href="/games/add" class="btn">Додати гру</a>
+                <% } %>
                 <a href="/profile">Мій кабінет</a>
             <% } else { %>
                 <a href="/login">Увійти</a>
