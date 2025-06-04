@@ -1,20 +1,30 @@
 import { Router } from "express"
-import { RequestWithBody } from "../models/RequestTypes"
-import { LoginInputModel } from "../models/LoginInputModel"
-import { bodyLoginValidatorMiddleware, bodyPasswordValidatorMiddleware } from "../validator/LoginAndRegInputDataValidator"
-import { validationResult } from "express-validator"
-import { HTTP_CODES } from "../utility"
-import { UserRepository } from "../repositories/user-db-repository"
+import { reviewService } from "../business/review-business-layer"
+import { gamesService } from "../business/games-business-layer"
 
 export const ProfileRouter =  Router({})
 
 
 
 ProfileRouter.get('/', 
-    (req, res) => {
+    async (req, res) => {
     // @ts-ignore
         if (req.session.user) {
-        res.render('profile')
+            // @ts-ignore
+            const ReviewsMadedByUser = await reviewService.GetReviews(null, req.session.user.id) || []
+            const gameIds = [...new Set(ReviewsMadedByUser.map(r => r.gameId))];
+            const games = await gamesService.GetManyGamesByID(gameIds)
+            
+            const userReviews = ReviewsMadedByUser.map(review => {
+                const game = games.find(g => g.id === review.gameId);
+                return {
+                ...review,
+                // @ts-ignore
+                gameTitle: game.title
+                };
+            });
+                // @ts-ignore
+            res.render('profile', { user: req.session.user, myReviews: userReviews })
     }
     else res.redirect('/login')
 })

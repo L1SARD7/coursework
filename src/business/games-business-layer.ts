@@ -12,6 +12,10 @@ export const gamesService = {
         return await GamesRepository.GetGames(filter)
     },
 
+    async GetManyGamesByID (gameIds: any) {
+        return await GamesRepository.GetManyGamesByID(gameIds)
+    },
+
     async GetGameByID (id: number) {
         return await GamesRepository.GetGameByID(id)
     },

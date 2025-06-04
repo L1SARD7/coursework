@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>GamePedia</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <%- include('../Templates/header'); -%>
@@ -16,6 +16,24 @@
             <div style="color:#ffd700;"><b>Статус:</b> Адміністратор</div>
         <% } %>
     </div>
+    <h2>Ваші відгуки</h2>
+    <% if (myReviews.length > 0) { %>
+    <ul>
+    <% myReviews.forEach(function(review) { %>
+      <li>
+        <a href="/games/<%= review.gameId %>"><%= review.gameTitle %></a>
+        [<%= review.rating %>★]
+        <%= review.text ? review.text : "(Без тексту)" %>
+        <a href="/review/<%= review.id %>/edit" class="edit-btn">Редагувати</a>
+        <form action="/review/<%= review.id %>?_method=DELETE" method="POST" style="display:inline;">
+          <button type="submit" class="delete-btn">Видалити</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+<% } else { %>
+  <div>Ви ще не залишали жодного відгуку.</div>
+<% } %>
     <form action="/profile/logout" method="post" style="margin-top:24px;">
         <button class="btn" type="submit">Вийти з акаунту</button>
     </form>

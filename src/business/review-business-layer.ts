@@ -33,18 +33,23 @@ export const reviewService = {
         return CreatedReview
     },
 
-    // async UpdateGame (id: number, title: string | null, genre: string | null) {
-        
-    //    let new_data: any = {}
-    //    if (title) {
-    //         new_data.title = title
-    //     } if (genre) {
-    //         new_data.genre = genre
-    //     }
-    //     let result = await GamesRepository.UpdateGame(id, new_data)
-    //     if (result) {
-    //         return await GamesRepository.GetGameByID(id)
-    //     }
-    //     return null
-    // }
+    async DeleteReview (id: number) {
+            return await ReviewRepository.DeleteReview(id)  
+        },
+
+    async ChangeReview (reviewId: number, rating: number, text: string, gameId: number, authorId: number, authorName: string) : Promise<any> {
+        let newData = {
+            gameId: gameId,
+            authorId: authorId,
+            authorName: authorName,
+            rating: rating,
+            text: text
+        }
+        const result = await ReviewRepository.ChangeReview(reviewId, newData)
+        if (result) {
+            return await ReviewRepository.FindReviewByReviewId(reviewId)
+        } else {
+            return null
+        }
+    }
 }

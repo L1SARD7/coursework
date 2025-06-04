@@ -6,6 +6,12 @@ export const GamesRepository = {
         return await client.db("GamePedia").collection("games").find(filter).toArray()
     },
 
+    async GetManyGamesByID (gameIds: any) {
+        return await client.db("GamePedia").collection("games")
+        .find({ id: { $in: gameIds } })
+        .toArray();
+    },
+
     async GetGameByID (id: number) {
         return await client.db("GamePedia").collection("games").findOne({id: id})
     },
