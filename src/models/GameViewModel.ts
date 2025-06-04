@@ -5,5 +5,6 @@ export type GameViewModel = {
     release_year: Number,
     developer: String,
     description: String,
-    imageURL: string
+    imageURL: string,
+    trailerYoutubeId: string
 }

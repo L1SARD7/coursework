@@ -9,18 +9,27 @@
 <%- include('../Templates/header'); -%>
 <main class="main">
     <div class="game-info">
-        <% if (game.imageUrl) { %>
-            <img class="game-img" src="<%= game.imageUrl %>" alt="<%= game.title %>">
+        <% if (game.imageURL) { %>
+            <img class="game-img" src="<%= game.imageURL %>" alt="<%= game.title %>">
         <% } %>
         <div class="game-meta">
             <h1><%= game.title %></h1>
             <div><b>Жанр:</b> <%= game.genre %></div>
-            <div><b>Рік:</b> <%= game.year %></div>
+            <div><b>Рік:</b> <%= game.release_year %></div>
             <div><b>Розробник:</b> <%= game.developer %></div>
             <div><b>Опис:</b> <%= game.description %></div>
             <% if (game.rating) { %>
                 <div><b>Середня оцінка:</b> <%= game.rating %></div>
             <% } %>
+            <% if (game.trailerYoutubeId) { %>
+                <h3>Трейлер</h3>
+                <div class="trailer-block">
+                    <iframe width="420" height="236"
+                    src="https://www.youtube.com/embed/<%= game.trailerYoutubeId %>"
+                    allowfullscreen></iframe>
+                </div>
+            <% } %>
+
         </div>
     </div>
 

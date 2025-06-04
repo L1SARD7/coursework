@@ -5,5 +5,5 @@ export type CreateGameInputModel = {
     developer: string,
     description: string,
     imageURL: string,
-    trailerURL: string
+    trailerYoutubeId: string
 }

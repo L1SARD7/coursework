@@ -20,7 +20,7 @@ export const gamesService = {
         return await GamesRepository.DeleteGame(id)  
     },
 
-    async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerURL: string) : Promise<any> {
+    async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string) : Promise<any> {
         let newGame = {
             id: +(new Date()),
             title: title,
@@ -29,7 +29,7 @@ export const gamesService = {
             developer: developer,
             description: description,
             imageURL: imageURL,
-            trailerURL: trailerURL
+            trailerYoutubeId: trailerYoutubeId
         }
         await GamesRepository.CreateNewGame(newGame)
         let CreatedGame = await GamesRepository.GetGameByID(newGame.id)

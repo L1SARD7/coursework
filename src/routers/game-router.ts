@@ -19,36 +19,7 @@ export const GamesRouter =  Router({})
 
 
 
-GamesRouter.get('/', 
-    queryTitleValidatorMiddleware,
-    queryGenreValidatorMiddleware,
-    async (req: RequestWithQuerry<GetGameWithQuerry>,
-    res: Response) => {
 
-    const validation = validationResult(req)
-    if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
-        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-    }
-    let SortedGames = await gamesService.GetGames(req.query.title, req.query.genre)
-    res.json(SortedGames).status(HTTP_CODES.OK_200)
-})
-GamesRouter.get('/:id',
-    paramsIdValidatorMiddleware,
-    async (req: RequestWithParams<URIParamsId>,
-    res: Response) => {
-    const validation = validationResult(req)
-    if (!validation.isEmpty()) {
-        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
-    }
-    const FoundGame = await gamesService.GetGameByID(+req.params.id)
-    const Reviews = await reviewService.GetReviews(+req.params.id, null)
-    if (FoundGame) {
-        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: Reviews})
-    }
-    else {
-        res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
-    }
-})
 
 GamesRouter.get('/add', 
     async (req: any, res: any) => {
@@ -56,7 +27,7 @@ GamesRouter.get('/add',
         return res.status(HTTP_CODES.Unauthorized_401).send("Доступ лише для адміністратора");
     }
     res.render('create-new-game');
-    }
+}
 )
 
 GamesRouter.post('/add',
@@ -72,7 +43,7 @@ GamesRouter.post('/add',
             req.body.developer, 
             req.body.description, 
             req.body.imageURL, 
-            req.body.trailerURL)
+            req.body.trailerYoutubeId)
 
         if (CreatedGame) {
             res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
@@ -80,6 +51,38 @@ GamesRouter.post('/add',
             res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
         }
 
+    }
+})
+
+GamesRouter.get('/', 
+    queryTitleValidatorMiddleware,
+    queryGenreValidatorMiddleware,
+    async (req: RequestWithQuerry<GetGameWithQuerry>,
+    res: Response) => {
+
+    const validation = validationResult(req)
+    if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    }
+    let SortedGames = await gamesService.GetGames(req.query.title, req.query.genre)
+    res.json(SortedGames).status(HTTP_CODES.OK_200)
+})
+
+GamesRouter.get('/:id',
+    paramsIdValidatorMiddleware,
+    async (req: RequestWithParams<URIParamsId>,
+    res: Response) => {
+    const validation = validationResult(req)
+    if (!validation.isEmpty()) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    }
+    const FoundGame = await gamesService.GetGameByID(+req.params.id)
+    const Reviews = await reviewService.GetReviews(+req.params.id, null)
+    if (FoundGame) {
+        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: Reviews})
+    }
+    else {
+        res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
     }
 })
 
