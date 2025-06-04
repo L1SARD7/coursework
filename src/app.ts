@@ -4,6 +4,7 @@ import { LoginRouter } from './routers/login-router';
 import session from 'express-session';
 import { RegistrationRouter } from './routers/registration-router';
 import { ProfileRouter } from './routers/profile-router';
+import { ReviewRouter } from './routers/review-router';
 
 export const app = express()
 
@@ -34,6 +35,8 @@ app.use('/login', LoginRouter)
 app.use('/registration', RegistrationRouter)
 
 app.use('/profile', ProfileRouter)
+
+app.use('/review', ReviewRouter)
 
 app.use('/', (req, res) => {
     res.render('main')

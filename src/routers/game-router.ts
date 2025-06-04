@@ -3,12 +3,13 @@ import { GetGameWithQuerry, RequestWithBody, RequestWithParams, RequestWithParam
 import { CreateGameInputModel } from "../models/CreateGameInputModel"
 import { GameViewModel } from "../models/GameViewModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
-import { URIParamsIdGame } from "../models/URIParamsIdGame"
+import { URIParamsId } from "../models/URIParamsId"
 import { HTTP_CODES } from "../utility"
 import { bodyGenreValidatorMiddleware, bodyTitleValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { validationResult } from "express-validator"
 import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
+import { ReviewRouter } from "./review-router"
 
 
 
@@ -32,13 +33,14 @@ GamesRouter.get('/',
 })
 GamesRouter.get('/:id',
     paramsIdValidatorMiddleware,
-    async (req: RequestWithParams<URIParamsIdGame>,
+    async (req: RequestWithParams<URIParamsId>,
     res: Response) => {
     const validation = validationResult(req)
     if (!validation.isEmpty()) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
-    let FoundGame = await gamesService.GetGameByID(+req.params.id)
+    const FoundGame = await gamesService.GetGameByID(+req.params.id)
+    //const Reviews = await ReviewRouter
     if (FoundGame) {
         res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: []})
     }
@@ -49,7 +51,7 @@ GamesRouter.get('/:id',
 GamesRouter.delete('/:id',
     BasicAuthentificator, 
     paramsIdValidatorMiddleware,
-    async (req: RequestWithParams<URIParamsIdGame>, res) => {
+    async (req: RequestWithParams<URIParamsId>, res) => {
     const validation = validationResult(req)
     if (!validation.isEmpty()) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
@@ -83,7 +85,7 @@ GamesRouter.put('/:id',
     paramsIdValidatorMiddleware,
     bodyTitleValidatorMiddleware,
     bodyGenreValidatorMiddleware,
-    async (req: RequestWithParamsAndBody<URIParamsIdGame, UpdateGameInputModel>,
+    async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
     res: Response) => {
     const validation = validationResult(req)
     if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
