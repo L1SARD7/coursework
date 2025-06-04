@@ -1,12 +1,7 @@
 import { MongoClient } from "mongodb"
-import { GameViewModel } from "../models/GameViewModel"
-import { UserViewModule } from "../models/UserViewModule"
 
 
-export type DB_Type = {
-    games: GameViewModel[]
-    admins: UserViewModule
-}
+
 
 const MongoURI = process.env.MongoURI || "mongodb://0.0.0.0:27017"
 

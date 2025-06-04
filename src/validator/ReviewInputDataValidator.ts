@@ -1,4 +1,4 @@
 import { body } from "express-validator";
 
-export const bodyRatingReviewValidatorMiddleware = body('rating').trim().isLength({min: 3, max: 15}).withMessage('Login should be from 3 to 15 letters.')
-export const bodyTextReviewValidatorMiddleware = body('text').trim().isLength({min: 3, max: 15}).withMessage('Password should be from 3 to 15 letters.')
+export const bodyRatingReviewValidatorMiddleware = body('rating').trim().isNumeric().withMessage('Rating should be a number from 0 to 10.')
+export const bodyTextReviewValidatorMiddleware = body('text').trim().isLength({min: 3, max: 64}).withMessage('Text should be from 3 to 64 letters.')

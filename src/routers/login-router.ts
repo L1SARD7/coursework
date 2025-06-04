@@ -24,7 +24,7 @@ LoginRouter.post('/',
         const user = await UserRepository.FindUserByLogin(req.body.login)
         if (user && req.body.password === user.password) {
                 // @ts-ignore
-                req.session.user = { id: user._id, username: user.login, isAdmin: user.isAdmin };
+                req.session.user = { id: user.id, username: user.login, isAdmin: user.isAdmin };
                 res.redirect('/profile');
             } else {
                 res.status(HTTP_CODES.BAD_REQUEST_400).send('Неправильний логін або пароль')

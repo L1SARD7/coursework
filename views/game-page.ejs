@@ -32,7 +32,7 @@
             <ul>
             <% reviews.forEach(function(review) { %>
                 <li style="margin-bottom:18px;">
-                    <b><%= review.username %></b> 
+                    <b><%= review.authorName %></b> 
                     <span style="color: #ffd700">[<%= review.rating %>★]</span><br>
                     <%= review.text %>
                 </li>
@@ -46,7 +46,7 @@
     <% if (user) { %>
         <hr style="margin: 20px 0;">
         <h3>Залишити відгук</h3>
-        <form action="/review/<%= game._id %>" method="post" class="auth-form">
+        <form action="/review/<%= game.id %>" method="post" class="auth-form">
             <label>
                 Оцінка (1-10):<br>
                 <input type="number" name="rating" min="1" max="10" required>

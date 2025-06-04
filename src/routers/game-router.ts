@@ -10,6 +10,7 @@ import { validationResult } from "express-validator"
 import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
 import { ReviewRouter } from "./review-router"
+import { reviewService } from "../business/review-business-layer"
 
 
 
@@ -40,9 +41,9 @@ GamesRouter.get('/:id',
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
     const FoundGame = await gamesService.GetGameByID(+req.params.id)
-    //const Reviews = await ReviewRouter
+    const Reviews = await reviewService.GetReviews(+req.params.id, null)
     if (FoundGame) {
-        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: []})
+        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: Reviews})
     }
     else {
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
