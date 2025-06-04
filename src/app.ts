@@ -15,8 +15,8 @@ app.use(express.static('front'))
 
 app.use(session({
     secret: 'super-secret',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
 }));
 
 app.use((req, res, next) => {

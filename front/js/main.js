@@ -10,6 +10,10 @@ fetch('/games')
                 <span>Жанр: ${game.genre || 'N/A'}</span>
                 ${game.year ? `<br><span>Рік: ${game.year}</span>` : ''}`;
             list.appendChild(li);
+    li.innerHTML = `<a href="/games/${game.id}" style="color:#ffd700;">${game.title}</a><br>
+    <span>Жанр: ${game.genre || 'N/A'}</span>
+    ${game.year ? `<br><span>Рік: ${game.year}</span>` : ''}`;
+
         });
     })
     .catch(error => {

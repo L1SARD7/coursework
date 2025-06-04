@@ -31,7 +31,6 @@ GamesRouter.get('/',
     res.json(SortedGames).status(HTTP_CODES.OK_200)
 })
 GamesRouter.get('/:id',
-    
     paramsIdValidatorMiddleware,
     async (req: RequestWithParams<URIParamsIdGame>,
     res: Response) => {
@@ -39,9 +38,9 @@ GamesRouter.get('/:id',
     if (!validation.isEmpty()) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
-        let FoundGame = await gamesService.GetGameByID(+req.params.id)
+    let FoundGame = await gamesService.GetGameByID(+req.params.id)
     if (FoundGame) {
-        res.send(FoundGame).status(HTTP_CODES.OK_200)
+        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: []})
     }
     else {
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>GamePedia</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<%- include('../Templates/header'); -%>
+<main class="main">
+    <div class="game-info">
+        <% if (game.imageUrl) { %>
+            <img class="game-img" src="<%= game.imageUrl %>" alt="<%= game.title %>">
+        <% } %>
+        <div class="game-meta">
+            <h1><%= game.title %></h1>
+            <div><b>Жанр:</b> <%= game.genre %></div>
+            <div><b>Рік:</b> <%= game.year %></div>
+            <div><b>Розробник:</b> <%= game.developer %></div>
+            <div><b>Опис:</b> <%= game.description %></div>
+            <% if (game.rating) { %>
+                <div><b>Середня оцінка:</b> <%= game.rating %></div>
+            <% } %>
+        </div>
+    </div>
+
+    <hr style="margin: 24px 0;">
+
+    <div class="game-reviews">
+        <h2>Відгуки</h2>
+        <% if (reviews && reviews.length > 0) { %>
+            <ul>
+            <% reviews.forEach(function(review) { %>
+                <li style="margin-bottom:18px;">
+                    <b><%= review.username %></b> 
+                    <span style="color: #ffd700">[<%= review.rating %>★]</span><br>
+                    <%= review.text %>
+                </li>
+            <% }) %>
+            </ul>
+        <% } else { %>
+            <div>Ще немає відгуків. Будь першим!</div>
+        <% } %>
+    </div>
+
+    <% if (user) { %>
+        <hr style="margin: 20px 0;">
+        <h3>Залишити відгук</h3>
+        <form action="/games/<%= game._id %>/review" method="post" class="auth-form">
+            <label>
+                Оцінка (1-10):<br>
+                <input type="number" name="rating" min="1" max="10" required>
+            </label>
+            <br>
+            <label>
+                Ваш відгук:<br>
+                <textarea name="text" rows="3" cols="40" required></textarea>
+            </label>
+            <br>
+            <button type="submit" class="btn">Додати відгук</button>
+        </form>
+    <% } else { %>
+        <div style="margin-top:18px;">Щоб залишити відгук, <a href="/login">увійдіть у акаунт</a>.</div>
+    <% } %>
+</main>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

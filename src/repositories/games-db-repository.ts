@@ -7,7 +7,7 @@ export const GamesRepository = {
     },
 
     async GetGameByID (id: number) {
-        return await client.db("GamePedia").collection("games").find({id: id}).toArray()
+        return await client.db("GamePedia").collection("games").findOne({id: id})
     },
 
     async DeleteGame (id: number): Promise<Boolean> {

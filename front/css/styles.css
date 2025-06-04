@@ -142,3 +142,33 @@ h1 {
     max-width: 340px;
     box-shadow: 0 2px 7px #0004;
 }
+
+.game-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.game-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #333650;
+    box-shadow: 0 2px 7px #0002;
+}
+
+.game-meta h1 {
+    margin-top: 0;
+    color: #ffd700;
+    margin-bottom: 12px;
+}
+
+.game-meta > div {
+    margin-bottom: 8px;
+}
+
+.game-reviews ul {
+    padding-left: 18px;
+}
