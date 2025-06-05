@@ -1,3 +1,4 @@
+import { ReviewViewModel } from "../models/ReviewViewModel"
 import { GamesRepository } from "../repositories/games-db-repository"
 
 export const gamesService = {
@@ -56,5 +57,10 @@ export const gamesService = {
         } else {
             return null
         }
+    },
+
+    async GetAvgRating (reviews: ReviewViewModel[]) {
+        const ratings = reviews.map(r => Number(r.rating)).filter(r => !isNaN(r));
+        return (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1); 
     }
 }
