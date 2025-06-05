@@ -6,6 +6,7 @@ import { RegistrationRouter } from './routers/registration-router';
 import { ProfileRouter } from './routers/profile-router';
 import { ReviewRouter } from './routers/review-router';
 import methodOverride from 'method-override'
+import { MainRouter } from './routers/main-page-router';
 export const app = express()
 
 let BodyJsonMiddleware = express.json()
@@ -39,9 +40,7 @@ app.use('/profile', ProfileRouter)
 
 app.use('/review', ReviewRouter)
 
-app.use('/', (req, res) => {
-    res.render('main')
-})
+app.use('/', MainRouter)
 
 
 

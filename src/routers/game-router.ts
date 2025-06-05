@@ -11,8 +11,6 @@ import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
 import { ReviewRouter } from "./review-router"
 import { reviewService } from "../business/review-business-layer"
-import { error } from "console"
-import { ReviewViewModel } from "../models/ReviewViewModel"
 
 
 
@@ -47,7 +45,9 @@ GamesRouter.post('/add',
             req.body.developer, 
             req.body.description, 
             req.body.imageURL, 
-            req.body.trailerYoutubeId)
+            req.body.trailerYoutubeId,
+            req.body.bannerURL
+        )
     
         if (CreatedGame) {
             res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
@@ -142,7 +142,9 @@ GamesRouter.put('/:id',
             req.body.developer, 
             req.body.description, 
             req.body.imageURL, 
-            req.body.trailerYoutubeId)
+            req.body.trailerYoutubeId,
+            req.body.bannerURL
+        )
     if (UpdatedGame) {
         res.status(HTTP_CODES.OK_200).redirect(`/games/${req.params.id}`)
     } else {

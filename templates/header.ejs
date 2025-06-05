@@ -1,6 +1,9 @@
 <header class="header">
     <nav class="header-nav">
         <a class="logo" href="/">GamePedia</a>
+        <form class="game-list" method="get" action="/games/list">
+            <button type="submit" class="btn btn-game-list">Список всіх ігор</button>
+        </form>
         <form class="search" method="get" action="/search">
             <input type="text" name="q" placeholder="Пошук гри...">
             <button type="submit" class="btn">Знайти</button>

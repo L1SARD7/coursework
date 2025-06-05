@@ -22,11 +22,19 @@ export const gamesService = {
         return await GamesRepository.GetGameByID(id)
     },
 
+    async GetLatestGames () {
+        return await GamesRepository.GetSortedGames({ id: -1 })
+    },
+
+    async GetTopRatedGames () {
+        return await GamesRepository.GetSortedGames({ avgRating: -1 })
+    },
+    
     async DeleteGame (id: number) {
         return await GamesRepository.DeleteGame(id)  
     },
 
-    async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string) : Promise<any> {
+    async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string) : Promise<any> {
         const newGame = {
             id: +(new Date()),
             title: title,
@@ -35,14 +43,15 @@ export const gamesService = {
             developer: developer,
             description: description,
             imageURL: imageURL,
-            trailerYoutubeId: trailerYoutubeId
+            trailerYoutubeId: trailerYoutubeId,
+            bannerURL: bannerURL
         }
         await GamesRepository.CreateNewGame(newGame)
         const CreatedGame = await GamesRepository.GetGameByID(newGame.id)
         return CreatedGame
     },
 
-    async UpdateGame (id: number, title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string) {        
+    async UpdateGame (id: number, title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string) {        
         const newData = {
             title: title,
             genre: genre,
@@ -50,7 +59,8 @@ export const gamesService = {
             developer: developer,
             description: description,
             imageURL: imageURL,
-            trailerYoutubeId: trailerYoutubeId
+            trailerYoutubeId: trailerYoutubeId,
+            bannerURL: bannerURL
         }
         let result = await GamesRepository.UpdateGame(id, newData)
         if (result) {

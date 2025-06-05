@@ -5,5 +5,6 @@ export type UpdateGameInputModel = {
     developer: string,
     description: string,
     imageURL: string,
-    trailerYoutubeId: string
+    trailerYoutubeId: string,
+    bannerURL: string
 }
