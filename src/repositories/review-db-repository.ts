@@ -24,7 +24,7 @@ export const ReviewRepository = {
     },
 
     async ChangeReview (id: number, data: any) {
-        const result = await client.db("GamePedia").collection("games").updateOne({id: id}, {$set : data})
+        const result = await client.db("GamePedia").collection("reviews").updateOne({id: id}, {$set : data})
         return result.modifiedCount === 1
     }
 }

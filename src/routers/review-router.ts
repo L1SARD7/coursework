@@ -79,9 +79,9 @@ ReviewRouter.put('/:id',
         // @ts-ignore
         if (req.session.user) {
             // @ts-ignore
-            const changedReview = await reviewService.ChangeReview(+req.params.id, req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
+            const changedReview = await reviewService.ChangeReview(+req.params.id, req.body.rating, req.body.text)
             if (changedReview) {
-                res.status(HTTP_CODES.Created_201)
+                res.status(HTTP_CODES.Created_201).redirect(req.body.returnTo)
             } else {
                 res.status(HTTP_CODES.BAD_REQUEST_400)
             }

@@ -16,30 +16,42 @@
             <div style="color:#ffd700;"><b>Статус:</b> Адміністратор</div>
         <% } %>
     </div>
+    <div class="profile-reviews">
     <h2>Ваші відгуки</h2>
     <% if (myReviews.length > 0) { %>
-    <ul>
-    <% myReviews.forEach(function(review) { %>
-      <li>
-        <a href="/games/<%= review.gameId %>"><%= review.gameTitle %></a>
-        [<%= review.rating %>★]
-        <%= review.text ? review.text : "(Без тексту)" %>
-        <a href="/review/<%= review.id %>/edit" class="edit-btn">Редагувати</a>
-        <form action="/review/<%= review.id %>?_method=DELETE" method="POST" style="display:inline;">
-          <button type="submit" class="delete-btn">Видалити</button>
-        </form>
-      </li>
-    <% }) %>
-  </ul>
-<% } else { %>
-  <div>Ви ще не залишали жодного відгуку.</div>
-<% } %>
+      <ul class="review-list">
+        <% myReviews.forEach(function(review, idx) { %>
+  <li class="review-item" id="review-<%= review.id %>">
+    <div class="review-header">
+      <a href="/games/<%= review.gameId %>" class="review-game-link"><%= review.gameTitle %></a>
+      <span class="review-rating">[<%= review.rating %>★]</span>
+    </div>
+    <div class="review-body" id="review-body-<%= review.id %>">
+      <span class="review-text"><%= review.text ? review.text : "(Без тексту)" %></span>
+    </div>
+    <div class="review-actions">
+      <button class="edit-btn" onclick='showEditForm(<%= review.id %>, <%= review.rating %>, <%- JSON.stringify(review.text || "") %>)'>
+        Редагувати
+      </button>
+      <form action="/review/<%= review.id %>?_method=DELETE" method="POST" style="display:inline;">
+        <button type="submit" class="delete-btn">Видалити</button>
+      </form>
+    </div>
+  </li>
+<% }) %>
+
+      </ul>
+    <% } else { %>
+      <div class="review-empty">Ви ще не залишали жодного відгуку.</div>
+    <% } %>
+</div>
+
     <form action="/profile/logout" method="post" style="margin-top:24px;">
         <button class="btn" type="submit">Вийти з акаунту</button>
     </form>
 </main>
 
-<script src="/js/main.js"></script>
+<script src="/js/profile.js"></script>
 
 </body>
 </html>

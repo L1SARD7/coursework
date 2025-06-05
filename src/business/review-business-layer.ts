@@ -37,11 +37,8 @@ export const reviewService = {
             return await ReviewRepository.DeleteReview(id)  
         },
 
-    async ChangeReview (reviewId: number, rating: number, text: string, gameId: number, authorId: number, authorName: string) : Promise<any> {
+    async ChangeReview (reviewId: number, rating: number, text: string) : Promise<any> {
         let newData = {
-            gameId: gameId,
-            authorId: authorId,
-            authorName: authorName,
             rating: rating,
             text: text
         }
