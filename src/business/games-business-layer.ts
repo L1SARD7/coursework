@@ -3,15 +3,20 @@ import { GamesRepository } from "../repositories/games-db-repository"
 import { reviewService } from "./review-business-layer"
 
 export const gamesService = {
-    async GetGames (title: string | null, genre: string | null) {
+    async GetGamesByFilter (title: string | null, genre: string | null) {
         let filter: any = {}    
         if (title) {
             filter.title = title
         }
-        if (genre) {
-            filter.genre = genre
-        }
         return await GamesRepository.GetGames(filter)
+    },
+
+    async FindGamesByTitle(title: string) {
+    return await GamesRepository.FindGamesByTitle(title)
+    },
+
+    async GetAllGames() {
+        return await GamesRepository.GetAllGames()
     },
 
     async GetManyGamesByID (gameIds: any) {

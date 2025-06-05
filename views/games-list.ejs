@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>GamePedia</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('../Templates/header'); -%>
+    <main class="main">
+        <% if (games.length !== 0) { %>
+            <h1 class="section-title">Всі ігри</h1>
+            <div class="games-grid">
+                <% games.forEach(function(game) { %>
+                    <a href="/games/<%= game.id %>" class="game-card">
+                        <img src="<%= game.bannerURL || game.imageURL %>" alt="<%= game.title %>" class="game-banner-img">
+                        <div class="game-card-title"><%= game.title %></div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <h1>Не було знайдено жодних ігор. Переконайтесь, що ввели правильну назву.</h1>
+        <% } %>
+    </main>
+</body>
+</html>
+</html>

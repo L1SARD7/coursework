@@ -1,15 +1,12 @@
 import { Router, Response, NextFunction } from "express"
 import { GetGameWithQuerry, RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuerry } from "../models/RequestTypes"
 import { CreateGameInputModel } from "../models/CreateGameInputModel"
-import { GameViewModel } from "../models/GameViewModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
 import { URIParamsId } from "../models/URIParamsId"
 import { HTTP_CODES } from "../utility"
 import { gameDataInputValidatorMiddleware, paramsIdValidatorMiddleware, queryGenreValidatorMiddleware, queryTitleValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { validationResult } from "express-validator"
-import { BasicAuthentificator } from "../auth/authentificator"
 import { gamesService } from "../business/games-business-layer"
-import { ReviewRouter } from "./review-router"
 import { reviewService } from "../business/review-business-layer"
 
 
@@ -60,6 +57,22 @@ GamesRouter.post('/add',
     }
 })
 
+GamesRouter.get('/list',
+    queryTitleValidatorMiddleware,
+    async (req: any, res) => {
+    const validation = validationResult(req)
+    if (req.query.title && !validation.isEmpty()) {
+        res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
+    }
+    let gamesList
+    if (req.query.title) {
+        gamesList = await gamesService.FindGamesByTitle(req.query.title)
+    } else {
+        gamesList = await gamesService.GetAllGames()
+    }
+    res.render('games-list', {games: gamesList})
+})
+
 GamesRouter.get('/', 
     queryTitleValidatorMiddleware,
     queryGenreValidatorMiddleware,
@@ -70,7 +83,7 @@ GamesRouter.get('/',
     if (((req.query.title) && (req.query.genre)) && (!validation.isEmpty())) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
-    let SortedGames = await gamesService.GetGames(req.query.title, req.query.genre)
+    let SortedGames = await gamesService.GetGamesByFilter(req.query.title, req.query.genre)
     res.json(SortedGames).status(HTTP_CODES.OK_200)
 })
 
@@ -110,7 +123,6 @@ GamesRouter.get('/:id/edit',
 })
 
 GamesRouter.delete('/:id',
-    //BasicAuthentificator, 
     paramsIdValidatorMiddleware,
     async (req: RequestWithParams<URIParamsId>, res) => {
     const validation = validationResult(req)
@@ -127,7 +139,6 @@ GamesRouter.delete('/:id',
 })
 
 GamesRouter.put('/:id',
-    //BasicAuthentificator, 
     paramsIdValidatorMiddleware,
     gameDataInputValidatorMiddleware,
     async (req: RequestWithParamsAndBody<URIParamsId, UpdateGameInputModel>,
