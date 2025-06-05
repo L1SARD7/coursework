@@ -154,6 +154,7 @@ h1 {
     min-width: 220px;
     max-width: 240px;
     width: 100%;
+    position: relative;
 }
 
 .game-cover-img {
@@ -389,3 +390,41 @@ h1 {
     padding: 0 5px;
     text-decoration: none;
 }
+
+.game-ratings {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+.game-rating-block {
+    background: #23243a;
+    border-radius: 7px;
+    padding: 9px 12px 7px 12px;
+    min-width: 84px;
+    text-align: center;
+    box-shadow: 0 1px 4px #0003;
+    font-size: 0.96rem;
+}
+.game-rating-label {
+    display: block;
+    font-size: 0.68rem;
+    color: #bdbdbd;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+}
+.game-rating-main {
+    font-size: 1.13rem;
+    color: #ffd700;
+    font-weight: bold;
+}
+.game-rating-main .star {
+    font-size: 1.11rem;
+    color: #ffd700;
+    vertical-align: -1px;
+}
+.game-rating-main .star.empty {
+    color: #8a8d99;
+}
+

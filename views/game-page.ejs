@@ -8,23 +8,42 @@
 <body>
 <%- include('../Templates/header'); -%>
 <main class="main">
+    <% let userReview = (user && reviews) ? reviews.find(r => r.authorId === user.id) : null; %>
     <div class="game-top-row">
         <div class="game-cover">
-            <% if (game.imageURL) { %>
-                <img class="game-cover-img" src="<%= game.imageURL %>" alt="<%= game.title %>">
-            <% } else { %>
-                <div class="game-cover-placeholder">[Немає зображення]</div>
-            <% } %>
-        </div>
+  <% if (game.imageURL) { %>
+    <img class="game-cover-img" src="<%= game.imageURL %>" alt="<%= game.title %>">
+  <% } else { %>
+    <div class="game-cover-placeholder">[Немає зображення]</div>
+  <% } %>
+  <div class="game-ratings">
+  <div class="game-rating-block">
+    <span class="game-rating-label">Оцінка GamePedia</span>
+    <span class="game-rating-main">
+      <span class="star">&#9733;</span>
+      <%= game.avgRating ? game.avgRating : '—' %>/10
+    </span>
+  </div>
+  <div class="game-rating-block">
+    <span class="game-rating-label">Ваша оцінка</span>
+    <span class="game-rating-main">
+      <% if (user && userReview) { %>
+        <span class="star">&#9733;</span>
+        <%= userReview.rating %>/10
+      <% } else { %>
+        <span class="star empty">&#9734;</span>
+        —/10
+      <% } %>
+    </span>
+  </div>
+</div>
+</div>
         <div class="game-meta">
             <h1><%= game.title %></h1>
             <div class="game-meta-info">
                 <span><b>Жанр:</b> <%= game.genre %></span>
                 <span><b>Рік:</b> <%= game.release_year || "невідомо" %></span>
                 <span><b>Розробник:</b> <%= game.developer || "невідомо" %></span>
-                <% if (game.avgRating) { %>
-                    <span><b>Середня оцінка:</b> <%= game.avgRating %></span>
-                <% } %>
             </div>
             <div class="game-description">
                 <b>Опис:</b>
@@ -57,7 +76,6 @@
 
     <div class="game-reviews">
     <h2>Відгуки</h2>
-    <% let userReview = (user && reviews) ? reviews.find(r => r.authorId === user.id) : null; %>
     <% let otherReviews = reviews 
         ? reviews.filter(r => (!user || r.authorId !== user.id) && r.text && r.text.trim().length > 0) 
         : []; %>
