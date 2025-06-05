@@ -11,7 +11,7 @@ export const ReviewRepository = {
     },
 
     async FindReviewByReviewId (id: Object) {
-        return await client.db("GamePedia").collection("reviews").find({id: id})
+        return await client.db("GamePedia").collection("reviews").findOne({id: id})
     },
 
     async CreateNewReview (newReview: ReviewViewModel) {

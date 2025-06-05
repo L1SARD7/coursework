@@ -6,5 +6,7 @@ export type GameViewModel = {
     developer: String,
     description: String,
     imageURL: string,
-    trailerYoutubeId: string
+    trailerYoutubeId: string,
+    bannerURL: string,
+    avgRating: number
 }

@@ -83,13 +83,9 @@ GamesRouter.get('/:id',
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
     const FoundGame = await gamesService.GetGameByID(+req.params.id)
-    const Reviews = await reviewService.GetReviews(+req.params.id, null) || []
-    let avgRating = null
-    if (Reviews.length !== 0) {
-        avgRating = await gamesService.GetAvgRating(Reviews as any)
-    }
+    const Reviews = await reviewService.GetReviews(+req.params.id, null) 
     if (FoundGame) {
-        res.status(HTTP_CODES.OK_200).render('game-page', { game: {...FoundGame, avgRating}, reviews: Reviews, })
+        res.status(HTTP_CODES.OK_200).render('game-page', { game: FoundGame, reviews: Reviews, })
     }
     else {
         res.sendStatus(HTTP_CODES.BAD_REQUEST_400)

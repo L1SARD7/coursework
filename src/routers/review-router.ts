@@ -8,10 +8,10 @@ import { reviewService } from "../business/review-business-layer"
 import { URIParamsId } from "../models/URIParamsId"
 import { ReviewRepository } from "../repositories/review-db-repository"
 import { paramsIdValidatorMiddleware } from "../validator/GamesInputDataValidator"
+import { gamesService } from "../business/games-business-layer"
+import { ReviewViewModel } from "../models/ReviewViewModel"
 
 export const ReviewRouter =  Router({})
-
-
 
 ReviewRouter.get('/',
     async (req, res) => {
@@ -40,6 +40,7 @@ ReviewRouter.post('/:id',
                 // @ts-ignore
                 const CreatedReview = await reviewService.CreateNewReview(req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
                 if (CreatedReview) {
+                    await gamesService.UpdateAvgRating(+req.params.id)
                     res.status(HTTP_CODES.Created_201).redirect(`/games/${req.params.id}`)
                 } else {
                     res.status(HTTP_CODES.BAD_REQUEST_400).redirect(`/`)
@@ -62,12 +63,19 @@ ReviewRouter.delete('/:id',
     if (!validation.isEmpty()) {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})
     }
-    let isDeleted = await reviewService.DeleteReview(+req.params.id)
-    if (isDeleted) {
-        res.status(HTTP_CODES.Deleted_204).redirect(req.body.returnTo)
+    const isExist : any = await reviewService.GetReviewById(+req.params.id)
+    if (isExist) {
+        let isDeleted = await reviewService.DeleteReview(+req.params.id)
+        if (isDeleted) {
+            await gamesService.UpdateAvgRating(isExist.gameId)
+            res.status(HTTP_CODES.Deleted_204).redirect(req.body.returnTo)
+        }
+        else {
+            res.status(HTTP_CODES.BAD_REQUEST_400)
+        }
     }
     else {
-        res.status(HTTP_CODES.BAD_REQUEST_400)
+        res.status(HTTP_CODES.BAD_REQUEST_400).send('Такого відгуку не існує.')
     }
 })
 
@@ -77,11 +85,13 @@ ReviewRouter.put('/:id',
     async (req: RequestWithParamsAndBody<URIParamsId, ReviewInputModel>, res) => {
     const validation = validationResult(req)
     if (validation.isEmpty()) {
+        const isExist : any = await reviewService.GetReviewById(+req.params.id)
         // @ts-ignore
-        if (req.session.user) {
+        if (req.session.user && isExist) {
             // @ts-ignore
             const changedReview = await reviewService.ChangeReview(+req.params.id, req.body.rating, req.body.text)
             if (changedReview) {
+                await gamesService.UpdateAvgRating(isExist.gameId)
                 res.status(HTTP_CODES.Created_201).redirect(req.body.returnTo)
             } else {
                 res.status(HTTP_CODES.BAD_REQUEST_400)

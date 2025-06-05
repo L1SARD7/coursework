@@ -19,6 +19,10 @@ export const reviewService = {
         }
     },
 
+    async GetReviewById (id: number) {
+        return await ReviewRepository.FindReviewByReviewId(id)
+    },
+
     async CreateNewReview (rating: number, text: string, gameId: number, authorId: number, authorName: string) : Promise<any> {
         let newReview : ReviewViewModel = {
             id: +(new Date()),

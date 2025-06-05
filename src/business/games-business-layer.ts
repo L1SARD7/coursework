@@ -1,5 +1,6 @@
 import { ReviewViewModel } from "../models/ReviewViewModel"
 import { GamesRepository } from "../repositories/games-db-repository"
+import { reviewService } from "./review-business-layer"
 
 export const gamesService = {
     async GetGames (title: string | null, genre: string | null) {
@@ -58,9 +59,13 @@ export const gamesService = {
             return null
         }
     },
-
-    async GetAvgRating (reviews: ReviewViewModel[]) {
-        const ratings = reviews.map(r => Number(r.rating)).filter(r => !isNaN(r));
-        return (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1); 
+    async UpdateAvgRating(id: number) {
+        const Reviews = await reviewService.GetReviews(id, null) || []    
+        const ratings = Reviews.map(r => Number(r.rating)).filter(r => !isNaN(r));
+        const updatedAvgRating = (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1); 
+        const newData = {
+            avgRating: updatedAvgRating
+        }
+        return await GamesRepository.UpdateGame(id, newData)   
     }
 }
