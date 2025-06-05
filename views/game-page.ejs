@@ -56,43 +56,83 @@
     <hr style="margin: 28px 0;">
 
     <div class="game-reviews">
-        <h2>Відгуки</h2>
-        <% if (reviews && reviews.length > 0) { %>
-            <ul>
-            <% reviews.forEach(function(review) { %>
-                <li style="margin-bottom:18px;">
-                    <b><%= review.authorName %></b>
-                    <span style="color: #ffd700">[<%= review.rating %>★]</span><br>
-                    <%= review.text %>
-                </li>
-            <% }) %>
-            </ul>
-        <% } else { %>
-            <div>Ще немає відгуків. Будь першим!</div>
-        <% } %>
-    </div>
-
+    <h2>Відгуки</h2>
+    <% let userReview = (user && reviews) ? reviews.find(r => r.authorId === user.id) : null; %>
+    <% let otherReviews = reviews 
+        ? reviews.filter(r => (!user || r.authorId !== user.id) && r.text && r.text.trim().length > 0) 
+        : []; %>
     <% if (user) { %>
-        <hr style="margin: 20px 0;">
-        <h3>Залишити відгук</h3>
-        <form action="/review/<%= game.id %>" method="post" class="auth-form">
-            <label>
-                Оцінка (1-10):<br>
-                <input type="number" name="rating" min="1" max="10" required>
-            </label>
-            <br>
-            <label>
-                Ваш відгук:<br>
-                <textarea name="text" rows="3" cols="40" required></textarea>
-            </label>
-            <br>
-            <button type="submit" class="btn">Додати відгук</button>
-        </form>
+        <% if (userReview) { %>
+            <div class="user-review-block">
+                <h3 style="margin-bottom: 8px; color: #ffd700;">Ваш відгук</h3>
+                <div class="review-item user-review" id="review-<%= userReview.id %>">
+                    <div class="review-header">
+                        <b><%= user.username %></b>
+                        <span class="review-rating">[<%= userReview.rating %>★]</span>
+                    </div>
+                    <div class="review-body" id="review-body-<%= userReview.id %>">
+                        <span class="review-text">
+                            <%= userReview.text %>
+                        </span>
+                    </div>
+                    <div class="review-actions">
+                        <button class="edit-btn"
+                            onclick='showEditForm(<%= userReview.id %>, <%= userReview.rating %>, <%- JSON.stringify(userReview.text || "") %>, <%= game.id %>)'>
+                            Редагувати
+                        </button>
+                        <form action="/review/<%= userReview.id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <input type="hidden" name="returnTo" value="/games/<%= game.id %>">
+                            <button type="submit" class="delete-btn">Видалити</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <button class="btn" style="margin-bottom: 22px;" onclick="document.getElementById('review-form-block').style.display = '';">Залишити відгук</button>
+            <div id="review-form-block" style="display:none;">
+                <form action="/review/<%= game.id %>" method="post" class="auth-form review-form">
+                    <input type="hidden" name="returnTo" value="/games/<%= game.id %>">
+                    <label>
+                        Оцінка (1-10):<br>
+                        <input type="number" name="rating" min="1" max="10" required>
+                    </label>
+                    <br>
+                    <label>
+                        Ваш відгук:<br>
+                        <textarea name="text" rows="3" cols="40"></textarea>
+                    </label>
+                    <br>
+                    <button type="submit" class="btn">Додати відгук</button>
+                </form>
+            </div>
+        <% } %>
     <% } else { %>
-        <div style="margin-top:18px;">Щоб залишити відгук, <a href="/login">увійдіть у акаунт</a>.</div>
+        <div class="login-required-warning">Щоб залишити відгук, <a href="/login">увійдіть у акаунт</a>.</div>
     <% } %>
+    <% if (otherReviews.length > 0) { %>
+        <h3 style="margin: 24px 0 12px 0;">Відгуки інших користувачів</h3>
+        <ul class="review-list">
+        <% otherReviews.forEach(function(review) { %>
+            <li class="review-item">
+                <div class="review-header">
+                    <b><%= review.authorName %></b>
+                    <span class="review-rating">[<%= review.rating %>★]</span>
+                </div>
+                <div class="review-body">
+                    <span class="review-text"><%= review.text %></span>
+                </div>
+            </li>
+        <% }) %>
+        </ul>
+    <% } else if (!userReview) { %>
+        <div class="review-empty">Ще немає відгуків. Будь першим!</div>
+    <% } %>
+</div>
+
+
+
 </main>
 
-<script src=""></script>
+<script src="/js/game-page.js"></script>
 </body>
 </html>

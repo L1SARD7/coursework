@@ -351,3 +351,41 @@ h1 {
     margin-top: 6px;
     margin-bottom: 0;
 }
+
+.user-review-block {
+    margin-bottom: 30px;
+}
+
+.user-review {
+    border: 1px solid #ffd700;
+    background: #232438;
+    box-shadow: 0 0 8px #ffd70044;
+}
+
+.user-review-block h3 {
+    color: #ffd700;
+    font-size: 1.19rem;
+    margin-bottom: 8px;
+}
+
+.login-required-warning {
+    margin-top: 14px;
+    padding: 12px 18px;
+    background: #261c28;
+    color: #ffd700;
+    border: 1px solid #ffd70077;
+    border-radius: 8px;
+    text-align: center;
+}
+.login-required-warning a {
+    color: #ffd700;
+    text-decoration: underline;
+    font-weight: 600;
+}
+.login-required-warning a:hover {
+    color: #23243a;
+    background: #ffd700;
+    border-radius: 4px;
+    padding: 0 5px;
+    text-decoration: none;
+}

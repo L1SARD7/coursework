@@ -31,22 +31,23 @@ ReviewRouter.post('/:id',
     const validation = validationResult(req)
     if (validation.isEmpty()) {
         // @ts-ignore
-        const isAlreadyCreated = await ReviewRepository.FindReviewByUserId(Number(req.session.user.id))
-        if (isAlreadyCreated) {
+        const isAlreadyCreated: [] = await reviewService.GetReviews(req.params.id, +req.session.user.id)
+        if (isAlreadyCreated.length !== 0) {
             res.send('В вас вже є залишений відгук цій грі.')
-        }
-        // @ts-ignore
-        if (req.session.user) {
+        } else {
             // @ts-ignore
-            const CreatedReview = await reviewService.CreateNewReview(req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
-            if (CreatedReview) {
-                res.status(HTTP_CODES.Created_201).redirect(`/games/${req.params.id}`)
-            } else {
-                res.status(HTTP_CODES.BAD_REQUEST_400).redirect(`/`)
+            if (req.session.user) {
+                // @ts-ignore
+                const CreatedReview = await reviewService.CreateNewReview(req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
+                if (CreatedReview) {
+                    res.status(HTTP_CODES.Created_201).redirect(`/games/${req.params.id}`)
+                } else {
+                    res.status(HTTP_CODES.BAD_REQUEST_400).redirect(`/`)
+                }
             }
-        }
-        else {
-            res.send('Для того, щоб залишити відгук, необхідно бути авторизованим.')
+            else {
+                res.send('Для того, щоб залишити відгук, необхідно бути авторизованим.')
+            }
         }
     }
     else {
@@ -63,7 +64,7 @@ ReviewRouter.delete('/:id',
     }
     let isDeleted = await reviewService.DeleteReview(+req.params.id)
     if (isDeleted) {
-        res.status(HTTP_CODES.Deleted_204)
+        res.status(HTTP_CODES.Deleted_204).redirect(req.body.returnTo)
     }
     else {
         res.status(HTTP_CODES.BAD_REQUEST_400)

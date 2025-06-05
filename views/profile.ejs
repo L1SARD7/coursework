@@ -34,6 +34,7 @@
         Редагувати
       </button>
       <form action="/review/<%= review.id %>?_method=DELETE" method="POST" style="display:inline;">
+        <input type="hidden" name="returnTo" value="/profile">
         <button type="submit" class="delete-btn">Видалити</button>
       </form>
     </div>
