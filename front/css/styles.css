@@ -54,10 +54,6 @@ body {
     transition: background 0.2s;
 }
 
-.btn:hover {
-    background: #fffbe8;
-}
-
 .buttons a {
     color: #fff;
     text-decoration: none;
@@ -71,6 +67,10 @@ body {
 .buttons a:hover {
     background: #2a2e48;
     color: #ffd700;
+}
+
+.buttons .btn-add-game {
+    color: #181a23;
 }
 
 .main {
