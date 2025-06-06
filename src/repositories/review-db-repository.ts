@@ -23,6 +23,10 @@ export const ReviewRepository = {
         return result.deletedCount === 1    
     },
 
+    async DeleteAllReviewsOfDeletedGame (id: number) {
+        return await client.db("GamePedia").collection("reviews").deleteMany({gameId: id})
+    },
+
     async ChangeReview (id: number, data: any) {
         const result = await client.db("GamePedia").collection("reviews").updateOne({id: id}, {$set : data})
         return result.modifiedCount === 1

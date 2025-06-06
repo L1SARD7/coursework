@@ -6,10 +6,8 @@ import { bodyRatingReviewValidatorMiddleware, bodyTextReviewValidatorMiddleware 
 import { ReviewInputModel } from "../models/ReviewInputModel"
 import { reviewService } from "../business/review-business-layer"
 import { URIParamsId } from "../models/URIParamsId"
-import { ReviewRepository } from "../repositories/review-db-repository"
 import { paramsIdValidatorMiddleware } from "../validator/GamesInputDataValidator"
 import { gamesService } from "../business/games-business-layer"
-import { ReviewViewModel } from "../models/ReviewViewModel"
 
 export const ReviewRouter =  Router({})
 

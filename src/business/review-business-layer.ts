@@ -3,9 +3,9 @@ import { ReviewRepository } from "../repositories/review-db-repository"
 
 
 export const reviewService = {
-    async GetReviews (gameId: number | null, authorId: number | null) {
+    async GetReviews(gameId: number | null, authorId: number | null) {
         if (gameId || authorId) {
-            let filter: any = {}    
+            let filter: any = {}
             if (gameId) {
                 filter.gameId = gameId
             }
@@ -19,12 +19,12 @@ export const reviewService = {
         }
     },
 
-    async GetReviewById (id: number) {
+    async GetReviewById(id: number) {
         return await ReviewRepository.FindReviewByReviewId(id)
     },
 
-    async CreateNewReview (rating: number, text: string, gameId: number, authorId: number, authorName: string) : Promise<any> {
-        let newReview : ReviewViewModel = {
+    async CreateNewReview(rating: number, text: string, gameId: number, authorId: number, authorName: string): Promise<any> {
+        let newReview: ReviewViewModel = {
             id: +(new Date()),
             gameId: gameId,
             authorId: authorId,
@@ -37,11 +37,15 @@ export const reviewService = {
         return CreatedReview
     },
 
-    async DeleteReview (id: number) {
-            return await ReviewRepository.DeleteReview(id)  
-        },
+    async DeleteReview(id: number) {
+        return await ReviewRepository.DeleteReview(id)
+    },
 
-    async ChangeReview (reviewId: number, rating: number, text: string) : Promise<any> {
+    async DeleteAllReviewsOfDeletedGame (id: number) {
+        return await ReviewRepository.DeleteAllReviewsOfDeletedGame(id)
+    },
+
+    async ChangeReview(reviewId: number, rating: number, text: string): Promise<any> {
         let newData = {
             rating: rating,
             text: text

@@ -1,10 +1,9 @@
-import { ReviewViewModel } from "../models/ReviewViewModel"
 import { GamesRepository } from "../repositories/games-db-repository"
 import { reviewService } from "./review-business-layer"
 
 export const gamesService = {
-    async GetGamesByFilter (title: string | null, genre: string | null) {
-        let filter: any = {}    
+    async GetGamesByFilter(title: string | null, genre: string | null) {
+        let filter: any = {}
         if (title) {
             filter.title = title
         }
@@ -12,34 +11,34 @@ export const gamesService = {
     },
 
     async FindGamesByTitle(title: string) {
-    return await GamesRepository.FindGamesByTitle(title)
+        return await GamesRepository.FindGamesByTitle(title)
     },
 
     async GetAllGames() {
         return await GamesRepository.GetAllGames()
     },
 
-    async GetManyGamesByID (gameIds: any) {
+    async GetManyGamesByID(gameIds: any) {
         return await GamesRepository.GetManyGamesByID(gameIds)
     },
 
-    async GetGameByID (id: number) {
+    async GetGameByID(id: number) {
         return await GamesRepository.GetGameByID(id)
     },
 
-    async GetLatestGames () {
+    async GetLatestGames() {
         return await GamesRepository.GetSortedGames({ id: -1 })
     },
 
-    async GetTopRatedGames () {
+    async GetTopRatedGames() {
         return await GamesRepository.GetSortedGames({ avgRating: -1 })
     },
-    
-    async DeleteGame (id: number) {
-        return await GamesRepository.DeleteGame(id)  
+
+    async DeleteGame(id: number) {
+        return await GamesRepository.DeleteGame(id)
     },
 
-    async CreateNewGame (title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string) : Promise<any> {
+    async CreateNewGame(title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string): Promise<any> {
         const newGame = {
             id: +(new Date()),
             title: title,
@@ -56,7 +55,7 @@ export const gamesService = {
         return CreatedGame
     },
 
-    async UpdateGame (id: number, title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string) {        
+    async UpdateGame(id: number, title: string, genre: string, release_year: number, developer: string, description: string, imageURL: string, trailerYoutubeId: string, bannerURL: string) {
         const newData = {
             title: title,
             genre: genre,
@@ -75,12 +74,12 @@ export const gamesService = {
         }
     },
     async UpdateAvgRating(id: number) {
-        const Reviews = await reviewService.GetReviews(id, null) || []    
+        const Reviews = await reviewService.GetReviews(id, null) || []
         const ratings = Reviews.map(r => Number(r.rating)).filter(r => !isNaN(r));
-        const updatedAvgRating = (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1); 
+        const updatedAvgRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1);
         const newData = {
             avgRating: updatedAvgRating
         }
-        return await GamesRepository.UpdateGame(id, newData)   
+        return await GamesRepository.UpdateGame(id, newData)
     }
 }
