@@ -1,4 +1,4 @@
-import { Router, Response, NextFunction } from "express"
+import { Router, Response } from "express"
 import { GetGameWithQuerry, RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuerry } from "../models/RequestTypes"
 import { CreateGameInputModel } from "../models/CreateGameInputModel"
 import { UpdateGameInputModel } from "../models/UpdateGameInputModel"
@@ -9,14 +9,7 @@ import { validationResult } from "express-validator"
 import { gamesService } from "../business/games-business-layer"
 import { reviewService } from "../business/review-business-layer"
 
-
-
-
 export const GamesRouter =  Router({})
-
-
-
-
 
 GamesRouter.get('/add', 
     async (req: any, res: any) => {
@@ -47,7 +40,7 @@ GamesRouter.post('/add',
         )
     
         if (CreatedGame) {
-            res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
+            return res.status(HTTP_CODES.Created_201).redirect(`/games/${CreatedGame.id}`)
         } else {
             res.sendStatus(HTTP_CODES.BAD_REQUEST_400)
         }

@@ -1,8 +1,5 @@
 import { MongoClient } from "mongodb"
 
-
-
-
 const MongoURI = process.env.MongoURI || "mongodb://0.0.0.0:27017"
 
 export const client = new MongoClient(MongoURI)

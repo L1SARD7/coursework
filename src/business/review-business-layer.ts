@@ -33,8 +33,7 @@ export const reviewService = {
             text: text
         }
         await ReviewRepository.CreateNewReview(newReview)
-        let CreatedReview = await ReviewRepository.FindReviews(newReview)
-        return CreatedReview
+        return newReview
     },
 
     async DeleteReview(id: number) {

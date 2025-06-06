@@ -29,25 +29,31 @@ ReviewRouter.post('/:id',
     const validation = validationResult(req)
     if (validation.isEmpty()) {
         // @ts-ignore
-        const isAlreadyCreated: [] = await reviewService.GetReviews(req.params.id, +req.session.user.id)
-        if (isAlreadyCreated.length !== 0) {
-            res.send('В вас вже є залишений відгук цій грі.')
+        if (!req.session.user) {
+            res.status(200).send('Щоб залишити відгук, потрібно бути авторизованим');
         } else {
             // @ts-ignore
-            if (req.session.user) {
+            const isAlreadyCreated: [] = await reviewService.GetReviews(+req.params.id, +req.session.user.id)
+            if (isAlreadyCreated.length !== 0) {
+                res.status(200).send('В вас вже є залишений відгук цій грі.')
+            } else {
                 // @ts-ignore
-                const CreatedReview = await reviewService.CreateNewReview(req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
-                if (CreatedReview) {
-                    await gamesService.UpdateAvgRating(+req.params.id)
-                    res.status(HTTP_CODES.Created_201).redirect(`/games/${req.params.id}`)
-                } else {
-                    res.status(HTTP_CODES.BAD_REQUEST_400).redirect(`/`)
+                if (req.session.user) {
+                    // @ts-ignore
+                    const CreatedReview = await reviewService.CreateNewReview(req.body.rating, req.body.text, +req.params.id, req.session.user.id, req.session.user.username)
+                    if (CreatedReview) {
+                        await gamesService.UpdateAvgRating(+req.params.id)
+                        res.status(HTTP_CODES.Created_201).redirect(`/games/${req.params.id}`)
+                    } else {
+                        res.status(HTTP_CODES.BAD_REQUEST_400).redirect(`/`)
+                    }
+                }
+                else {
+                    res.status(HTTP_CODES.Unauthorized_401).send('Для того, щоб залишити відгук, необхідно бути авторизованим.')
                 }
             }
-            else {
-                res.send('Для того, щоб залишити відгук, необхідно бути авторизованим.')
-            }
         }
+
     }
     else {
         res.status(HTTP_CODES.BAD_REQUEST_400).send({errors: validation.array()})

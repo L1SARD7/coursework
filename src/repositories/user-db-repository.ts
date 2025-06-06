@@ -1,5 +1,4 @@
 import { client} from "../db/db"
-import { LoginInputModel } from "../models/LoginInputModel"
 import { UserViewModel } from "../models/UserViewModel"
 
 export const UserRepository = {
